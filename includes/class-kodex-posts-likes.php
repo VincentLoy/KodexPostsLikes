@@ -13,7 +13,7 @@ class Kodex_Posts_Likes
     {
         $this->plugin_title = 'Kodex Posts likes';
         $this->plugin_name = 'kodex-posts-likes';
-        $this->version = '2.4.3';
+        $this->version = '2.5.0';
         $this->domain = 'kodex';
 
         $this->load_dependencies();
