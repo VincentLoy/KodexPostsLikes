@@ -33,12 +33,33 @@ class Kodex_Posts_Likes_Public
         return (isset($this->options[$name])) ? $this->options[$name] : false;
     }
 
+    public function get_real_ip_addr()
+    {
+        if (!empty($_SERVER['HTTP_CF_CONNECTING_IP'])) {
+            // Get IP if Cloudflare server
+            $ip = $_SERVER["HTTP_CF_CONNECTING_IP"];
+
+        } elseif (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+            //check ip from share internet
+            $ip = $_SERVER['HTTP_CLIENT_IP'];
+
+        } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+            //to check ip is pass from proxy
+            $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+
+        } else {
+            $ip = $_SERVER['REMOTE_ADDR'];
+        }
+
+        return $ip;
+    }
+
     public function get_user_identifier()
     {
         if (is_user_logged_in()) {
             $code = get_current_user_id();
         } else {
-            $code = $_SERVER['REMOTE_ADDR'];
+            $code = $this->get_real_ip_addr();
         }
         return md5($code);
     }
