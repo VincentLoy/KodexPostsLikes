@@ -1,9 +1,11 @@
 <?php
 
-class Kodex_Posts_Likes_Deactivator {
+class Kodex_Posts_Likes_Deactivator
+{
 
-	public static function deactivate() {
+    public static function deactivate()
+    {
 
-	}
+    }
 
 }
