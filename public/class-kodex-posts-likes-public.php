@@ -19,7 +19,7 @@ class Kodex_Posts_Likes_Public {
 
 	public function set_options(){
 		$defaults = array();
-		$this->defaults = Kodex_Posts_Likes::get_defaults();
+		$this->defaults = Kodex_Posts_Likes::getInstance()->get_defaults();
 		foreach($this->defaults as $k=>$v){
 			$defaults[$k] = $v['value'];
 		}

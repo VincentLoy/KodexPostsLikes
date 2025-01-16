@@ -1,7 +1,7 @@
 <?php
 
 class Kodex_Posts_Likes {
-
+	private static $instance = null;
 	protected $loader;
 	protected $plugin_title;
 	protected $plugin_name;
@@ -9,6 +9,14 @@ class Kodex_Posts_Likes {
 	protected $plugin_path;
 	protected $domain;
 	protected $version;
+	protected $defaults = [];
+
+	public static function getInstance() {
+		if (self::$instance === null) {
+			self::$instance = new self();
+		}
+		return self::$instance;
+	}
 
 	public function __construct() {
 
@@ -19,22 +27,28 @@ class Kodex_Posts_Likes {
 		if( !function_exists('get_plugin_data') ){
 			require_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 		}
-		$pluginData = get_plugin_data($this->plugin_file);
+		// set third parameter to false to avoid a PHP warning about translations
+		$pluginData = get_plugin_data($this->plugin_file, true, false);
 
 		$this->plugin_title = $pluginData['Name'];
 		$this->version      = $pluginData['Version'];
 		$this->domain       = $pluginData['TextDomain'];
 
+		add_action('init', array($this, 'init_plugin'));
+	}
+
+	public function init_plugin() {
 		$this->load_dependencies();
 		$this->set_locale();
+		$this->init_defaults();
 		$this->define_admin_hooks();
 		$this->define_public_hooks();
 
 		$this->run();
 	}
-
-	public static function get_defaults(){
-		$defaults = array(
+	
+	private function init_defaults() {
+		$this->defaults = array(
 			'like_text' => array(
 				'label' => __("Like button text", 'kodex-posts-likes'),
 				'value' => 'Like',
@@ -98,7 +112,10 @@ class Kodex_Posts_Likes {
 				'type'  => 'number'
 			),
 		);
-		return $defaults;
+	}
+
+	public function get_defaults() {
+		return $this->defaults;
 	}
 
 	public static function get_all_post_types(){
@@ -141,11 +158,7 @@ class Kodex_Posts_Likes {
 	}
 
 	private function set_locale() {
-		$plugin_i18n = new Kodex_Posts_Likes_i18n();
-		$plugin_i18n->set_domain( $this->get_domain() );
-
-		$this->loader->add_action( 'plugins_loaded', $plugin_i18n, 'load_plugin_textdomain' );
-
+		new Kodex_Posts_Likes_i18n($this->domain);
 	}
 
 	private function define_admin_hooks() {

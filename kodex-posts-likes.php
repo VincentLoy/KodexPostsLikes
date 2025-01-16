@@ -36,5 +36,8 @@ if(!function_exists('debug')){
 	}
 }
 
-require plugin_dir_path( __FILE__ ) . 'includes/class-kodex-posts-likes.php';
-$plugin = new Kodex_Posts_Likes();
+require_once plugin_dir_path(__FILE__) . 'includes/class-kodex-posts-likes.php';
+function run_kodex_posts_likes() {
+    Kodex_Posts_Likes::getInstance();
+}
+add_action('plugins_loaded', 'run_kodex_posts_likes');
