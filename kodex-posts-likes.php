@@ -2,11 +2,11 @@
 
 /**
  * Plugin Name:       Kodex Posts Likes
- * Plugin URI:        https://github.com/VincentLoy/KodexPostsLikes
+ * Plugin URI:        https://github.com/VincentLoy/kodex-posts-like
  * Description:       A simple AJaX based WordPress Plugin which allows your visitors to like or dislike posts, pages and cutom post types. 
  * Version:           2.6.1
  * Author:            Pierre Lebedel, Vincent Loy-Serre
- * Author URI:        https://github.com/VincentLoy/KodexPostsLikes
+ * Author URI:        https://github.com/VincentLoy/kodex-posts-like
  * License:           GPL-2.0+
  * License URI:       https://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       kodex-posts-likes
