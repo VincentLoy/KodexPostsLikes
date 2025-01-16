@@ -30,14 +30,25 @@ class Kodex_Posts_Likes_Public {
 		return (isset($this->options[$name])) ? $this->options[$name] : false;
 	}
 
-	public function get_user_identifier(){
-		if( is_user_logged_in() ){
-			$code = get_current_user_id();
-		}else{
-			$code = $_SERVER['REMOTE_ADDR'];
+	public function get_user_identifier() {
+		if (is_user_logged_in()) {
+			// Generate an anonymous hash based on a unique, non-changing user property like user_login
+			$code = 'user-' . hash('sha256', get_current_user_id() . NONCE_SALT);
+		} else {
+			// For guests, create or retrieve a persistent cookie identifier
+			if (!isset($_COOKIE['guest_id'])) {
+				// Generate a new unique identifier if no cookie exists
+				$guest_id = bin2hex(random_bytes(16)); // Generate a random, secure ID
+				setcookie('guest_id', $guest_id, time() + (10 * YEAR_IN_SECONDS), "/"); // Set for 10 years
+			} else {
+				$guest_id = $_COOKIE['guest_id'];
+			}
+			$code = 'guest-' . hash('sha256', $guest_id . NONCE_SALT);
 		}
-		return md5($code);
+	
+		return $code; // Return a secure, anonymized, unique identifier
 	}
+	
 
 	public function enqueue_styles() {
 		if( $this->get_option('include_css') ){
