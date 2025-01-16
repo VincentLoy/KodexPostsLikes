@@ -99,6 +99,21 @@ class Kodex_Posts_Likes_Public {
 		}
 	}
 
+	private function kodex_nonce_field( $action = -1, $name = '_wpnonce', $referer = true, $display = true, $post_id) {
+		$name        = esc_attr( $name );
+		$nonce_field = '<input type="hidden" id="' . $name . '-' . $post_id .'" name="' . $name . '" value="' . wp_create_nonce( $action ) . '" />';
+	
+		if ( $referer ) {
+			$nonce_field .= wp_referer_field( false );
+		}
+	
+		if ( $display ) {
+			echo $nonce_field;
+		}
+	
+		return $nonce_field;
+	}
+
 	private function buttons($post_id, $custom_liketext=false, $custom_disliketext=false){
 		$html = '';
 		$ident       = $this->get_user_identifier();
@@ -135,7 +150,7 @@ class Kodex_Posts_Likes_Public {
 			$html .= '</button>';
 		}
 
-		$html .= wp_nonce_field('kodex_posts_likes', 'nonce', true, false);
+		$html .= $this->kodex_nonce_field('kodex_posts_likes', 'nonce', true, false, $post_id);
 		
 		return $html;
 	}
